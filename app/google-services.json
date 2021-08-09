@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1012924852832",
+    "project_id": "messenger-3c89c",
+    "storage_bucket": "messenger-3c89c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012924852832:android:af37d5d8feb4aa66fbf105",
+        "android_client_info": {
+          "package_name": "ge.edu.freeuni.messenger.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1012924852832-24l0j8dmgh2ptdgvhknismbgpbuaasdn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmGoF5o5WrQqXQmZWZCAkIS6VjJNLtf-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012924852832-24l0j8dmgh2ptdgvhknismbgpbuaasdn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
