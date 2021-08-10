@@ -2,12 +2,15 @@ package ge.edu.freeuni.messenger.app.database
 
 import android.content.Context
 import android.widget.Toast
+
 import com.google.firebase.auth.FirebaseAuth
+
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+
 
 object FirebaseUtil {
     val ref: DatabaseReference = Firebase.database.reference
@@ -99,5 +102,6 @@ object FirebaseUtil {
                     "Failed: ${it.localizedMessage}",
                     Toast.LENGTH_LONG).show()
             }
+
     }
 }
