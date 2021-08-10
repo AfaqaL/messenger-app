@@ -11,8 +11,11 @@
         <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/activity_main.xml" value="0.17883690424136423" />
+        <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/activity_profile.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/activity_search.xml" value="0.2" />
         <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/activity_sign_up.xml" value="0.18541666666666667" />
-        <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/message_item.xml" value="0.21302083333333333" />
+        <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/message_item.xml" value="0.1" />
+        <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/layout/search_item.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/tatena/AndroidStudioProjects/messengerApp/messenger-app/app/src/main/res/menu/bottom_app_bar_menu.xml" value="0.21302083333333333" />
       </map>
     </option>

@@ -1,4 +1,4 @@
-package ge.edu.freeuni.messenger.app.mainActivity
+package ge.edu.freeuni.messenger.app.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

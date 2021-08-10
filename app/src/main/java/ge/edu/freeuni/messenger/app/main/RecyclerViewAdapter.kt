@@ -1,4 +1,4 @@
-package ge.edu.freeuni.messenger.app.mainActivity
+package ge.edu.freeuni.messenger.app.main
 
 import android.view.LayoutInflater
 import android.view.View
