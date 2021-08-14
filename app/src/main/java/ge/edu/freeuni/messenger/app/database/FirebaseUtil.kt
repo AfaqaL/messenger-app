@@ -120,4 +120,10 @@ object FirebaseUtil {
             }
 
     }
+
+    fun logOut() {
+        auth.signOut()
+        fUser = null
+        user = null
+    }
 }

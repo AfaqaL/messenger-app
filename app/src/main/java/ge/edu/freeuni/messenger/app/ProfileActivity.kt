@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ge.edu.freeuni.messenger.app.database.FirebaseUtil
 import ge.edu.freeuni.messenger.app.main.MainActivity
 
 class ProfileActivity : AppCompatActivity() {
@@ -23,7 +24,9 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun addSignOutListener() {
         findViewById<Button>(R.id.sign_out).setOnClickListener {
-
+            FirebaseUtil.logOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
     }
 
