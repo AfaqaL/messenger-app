@@ -35,8 +35,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
+        <TextView
+            android:id="@+id/profile_nickname"
             android:layout_height="wrap_content"
             style="@style/filled_edit_text"
             android:layout_width="300dp"
@@ -44,14 +44,14 @@
             android:layout_marginBottom="16dp"
             android:ems="10"
             android:textColorHint="@color/grey"
-            android:inputType="textPersonName"
+            android:textColor="@color/grey"
             android:text="Nino Tatenashvili"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"
+            app:layout_constraintBottom_toTopOf="@+id/profile_profession"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/profile_profession"
             style="@style/filled_edit_text"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="70dp"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/profile_nickname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

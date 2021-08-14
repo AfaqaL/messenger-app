@@ -118,7 +118,6 @@ object FirebaseUtil {
                     "Failed: ${it.localizedMessage}",
                     Toast.LENGTH_LONG).show()
             }
-
     }
 
     fun logOut() {
