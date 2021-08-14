@@ -14,12 +14,12 @@
 
         <Button
             style="@style/grey_outlined_button"
-            android:id="@+id/button4"
+            android:id="@+id/sign_out"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/button_text_size"
             android:layout_marginBottom="128dp"
-            android:text="sign out"
+            android:text="@string/sign_out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -31,7 +31,7 @@
             android:layout_marginBottom="20dp"
             android:text="update"
             android:textSize="@dimen/button_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/button4"
+            app:layout_constraintBottom_toTopOf="@+id/sign_out"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
