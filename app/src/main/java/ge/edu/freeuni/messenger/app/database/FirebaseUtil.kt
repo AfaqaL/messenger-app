@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import ge.edu.freeuni.messenger.app.database.model.Convo
+import ge.edu.freeuni.messenger.app.database.model.Message
 import ge.edu.freeuni.messenger.app.database.model.User
 
 
@@ -24,10 +26,18 @@ object FirebaseUtil {
 
 
     init {
-        fUser = Firebase.auth.currentUser
-        user = null
-        initUser()
+        fUser = auth.currentUser
+        user = User("afqena", "best thresh eune")
+//        initUser()
         if(fUser != null){ initUser() }
+    }
+
+    fun sendSms(to: String, text: String){
+        val key = key("sms", user!!.username, to)
+        access("sms", user!!.username, to, key)
+            .setValue(Message(text, true))
+        access("sms", to, user!!.username, key)
+            .setValue(Message(text, false))
     }
 
     private fun initUser() {
@@ -39,10 +49,6 @@ object FirebaseUtil {
         }
     }
 
-    fun filter(text: String){
-        ref.startAt(text)
-    }
-
     fun usernameFromMail(mail: String): String{
         val idx = mail.indexOf('@')
         Log.d("mylog-username", mail.substring(0, idx))
@@ -50,15 +56,19 @@ object FirebaseUtil {
     }
 
     fun access(vararg children: String): DatabaseReference{
-        var child = ref
-        for(ch in children){
-            child = child.child(ch)
-        }
-        return child
+        return access(ref, *children)
     }
 
-    fun key(vararg children: String): String? {
-        return access(*children).push().key
+    fun access(currReference: DatabaseReference, vararg children: String): DatabaseReference{
+        var current = currReference
+        for (child in children){
+            current = current.child(child)
+        }
+        return current
+    }
+
+    fun key(vararg children: String): String {
+        return access(*children).push().key!!
     }
 
     fun hasActiveUser(): Boolean{
@@ -106,6 +116,9 @@ object FirebaseUtil {
     }
 
     fun login(username: String, password: String, context: Context, completion: () -> Unit){
+        Toast.makeText(context,
+            "Success!!!!",
+            Toast.LENGTH_LONG).show()
         auth.signInWithEmailAndPassword("$username$mail", password)
             .addOnCompleteListener{ task ->
                 if(task.isSuccessful){
@@ -134,5 +147,21 @@ object FirebaseUtil {
         auth.signOut()
         fUser = null
         user = null
+    }
+
+    fun initConversationData(result: ArrayList<Convo>, completion: () -> Unit){
+        val convosRef = access("chats", user!!.username)
+        convosRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                task.result?.let { convos ->
+                    convos.children.forEach { convo ->
+                        val tempConvo = convo.getValue<Convo>()!!
+                        tempConvo.user = convo.key!!
+                        result.add(tempConvo)
+                    }
+                    completion()
+                }
+            }
+        }
     }
 }
