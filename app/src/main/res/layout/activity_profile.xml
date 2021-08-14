@@ -43,7 +43,7 @@
             android:background="@drawable/edit_text_background"
             android:layout_marginBottom="16dp"
             android:ems="10"
-            android:textColor="@color/grey"
+            android:textColorHint="@color/grey"
             android:inputType="textPersonName"
             android:text="Nino Tatenashvili"
             app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"

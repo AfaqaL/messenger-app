@@ -28,6 +28,8 @@
         <item name="android:textSize">@dimen/edit_text_text_size</item>
         <item name="android:textColorHint">@color/edit_text_hint_color</item>
     </style>
+
+
     <style name="Theme.MyTextTheme" parent="TextAppearance.MaterialComponents.Headline4" />
 
 </resources>
