@@ -1,6 +1,7 @@
 package ge.edu.freeuni.messenger.app.database
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 
 import com.google.firebase.auth.FirebaseAuth
@@ -25,19 +26,26 @@ object FirebaseUtil {
     init {
         fUser = Firebase.auth.currentUser
         user = null
-        if(fUser == null){ user = null }
-        else{
-            val username = usernameFromMail(fUser!!.email!!)
-            access("users", username).get().addOnSuccessListener { data ->
-                user = User(username, data.value as String)
-            }.addOnFailureListener{
-                user = null
-            }
+        initUser()
+        if(fUser != null){ initUser() }
+    }
+
+    private fun initUser() {
+        val username = usernameFromMail(fUser!!.email!!)
+        access("users", username).get().addOnSuccessListener { data ->
+            user = User(username, data.value as String)
+        }.addOnFailureListener{
+            user = null
         }
+    }
+
+    fun filter(text: String){
+        ref.startAt(text)
     }
 
     fun usernameFromMail(mail: String): String{
         val idx = mail.indexOf('@')
+        Log.d("mylog-username", mail.substring(0, idx))
         return mail.substring(0, idx)
     }
 
@@ -106,6 +114,7 @@ object FirebaseUtil {
                     Toast.makeText(context,
                         "Success!!!!",
                         Toast.LENGTH_LONG).show()
+                    initUser()
                     completion()
                 }else{
                     Toast.makeText(context,
