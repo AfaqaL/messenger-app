@@ -1,11 +1,13 @@
 package ge.edu.freeuni.messenger.app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
+import ge.edu.freeuni.messenger.app.main.MainActivity
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +20,12 @@ class SignUpActivity : AppCompatActivity() {
         val pet = findViewById<EditText>(R.id.edit_text_password)
         val oet = findViewById<EditText>(R.id.edit_text_occupation)
 
-        FirebaseUtil.signup(uet.text.toString(), pet.text.toString(), oet.text.toString(), this)
+        FirebaseUtil.signup(uet.text.toString(), pet.text.toString(), oet.text.toString(),
+            this, this::registerCallback)
+    }
+
+    private fun registerCallback(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

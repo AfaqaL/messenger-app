@@ -39,7 +39,8 @@ object FirebaseUtil {
         return user != null
     }
 
-    fun signup(username: String, password: String, occupation: String, context: Context): Boolean {
+    fun signup(username: String, password: String, occupation: String, context: Context,
+               completion: () -> Unit): Boolean {
         return when{
             occupation.isBlank() ->{
                 Toast.makeText(context, "Occupation field can not be empty", Toast.LENGTH_SHORT).show()
@@ -58,31 +59,25 @@ object FirebaseUtil {
             else -> {
                 auth.createUserWithEmailAndPassword("$username$mail", password)
                     .addOnCompleteListener{ task ->
-                        user = if(task.isSuccessful){
+                        if(task.isSuccessful){
                             // TODO: call a method identifying a success (callback)
                             Toast.makeText(context,
                                 "Success!!!!!",
                                 Toast.LENGTH_LONG).show()
-                            Firebase.auth.currentUser
+                            user = Firebase.auth.currentUser
+                            completion()
                         }else{
                             Toast.makeText(context,
-                                "Error: Failed to register user\nReason: ${task.exception?.localizedMessage}",
+                                "Error: Failed to register user\nReason 1111: ${task.exception?.localizedMessage}",
                                 Toast.LENGTH_LONG).show()
-                            null
                         }
-                    }
-                    .addOnFailureListener{
-                        Toast.makeText(context,
-                            "Error: Failed to register user\nReason: ${it.localizedMessage}",
-                            Toast.LENGTH_LONG).show()
-                        user = null
                     }
                 return true
             }
         }
     }
 
-    fun login(username: String, password: String, context: Context){
+    fun login(username: String, password: String, context: Context, completion: () -> Unit){
         auth.signInWithEmailAndPassword("$username$mail", password)
             .addOnCompleteListener{ task ->
                 if(task.isSuccessful){
@@ -91,6 +86,7 @@ object FirebaseUtil {
                     Toast.makeText(context,
                         "Success!!!!",
                         Toast.LENGTH_LONG).show()
+                    completion()
                 }else{
                     Toast.makeText(context,
                         "Suck My DDD",
