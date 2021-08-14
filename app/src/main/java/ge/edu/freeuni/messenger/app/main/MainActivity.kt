@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpBottomNavigationBar() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnFocusChangeListene
 
         Toast.makeText(this, bottomNavigationView.selectedItemId.toString(), Toast.LENGTH_SHORT).show()
     }

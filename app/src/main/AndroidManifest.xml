@@ -10,12 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
         <activity
-            android:name=".ProfileActivity"
+            android:name=".chat.ChatActivity"
             android:exported="true" >
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true">
+
         </activity>
         <activity
             android:name=".search.SearchActivity"
             android:exported="true">
+
         </activity>
         <activity
             android:name=".SignUpActivity"
@@ -28,6 +34,7 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
