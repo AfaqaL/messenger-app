@@ -12,6 +12,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import ge.edu.freeuni.messenger.app.database.model.Convo
+import ge.edu.freeuni.messenger.app.database.model.Message
 import ge.edu.freeuni.messenger.app.database.model.User
 
 
@@ -29,6 +31,15 @@ object FirebaseUtil {
         if (fUser != null) {
             initUser()
         }
+    }
+
+
+    fun sendSms(to: String, text: String){
+        val key = key("sms", user!!.username, to)
+        access("sms", user!!.username, to, key)
+            .setValue(Message(text, true))
+        access("sms", to, user!!.username, key)
+            .setValue(Message(text, false))
     }
 
     fun initUser() {
@@ -49,16 +60,21 @@ object FirebaseUtil {
         return mail.substring(0, idx)
     }
 
-    fun access(vararg children: String): DatabaseReference {
-        var child = ref
-        for (ch in children) {
-            child = child.child(ch)
-        }
-        return child
+
+    fun access(vararg children: String): DatabaseReference{
+        return access(ref, *children)
     }
 
-    fun key(vararg children: String): String? {
-        return access(*children).push().key
+    fun access(currReference: DatabaseReference, vararg children: String): DatabaseReference{
+        var current = currReference
+        for (child in children){
+            current = current.child(child)
+        }
+        return current
+    }
+
+    fun key(vararg children: String): String {
+        return access(*children).push().key!!
     }
 
     fun hasActiveUser(): Boolean {
@@ -145,12 +161,29 @@ object FirebaseUtil {
     fun searchUsers(prefix: String, completion: (ls: List<User>) -> Unit) {
 
         val res = mutableListOf<User>()
-        access("users").orderByKey().startAt(prefix).endAt(prefix+"z").get().addOnCompleteListener { ls ->
-            ls.result?.let { users ->
-                users.children.forEach { user ->
-                    res.add(User(user.key.toString(), user.value.toString()))
+        access("users").orderByKey().startAt(prefix).endAt(prefix + "z").get()
+            .addOnCompleteListener { ls ->
+                ls.result?.let { users ->
+                    users.children.forEach { user ->
+                        res.add(User(user.key.toString(), user.value.toString()))
+                    }
+                    completion(res)
                 }
-                completion(res)
+            }
+    }
+
+    fun initConversationData(result: ArrayList<Convo>, completion: () -> Unit) {
+        val convosRef = access("chats", user!!.username)
+        convosRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                task.result?.let { convos ->
+                    convos.children.forEach { convo ->
+                        val tempConvo = convo.getValue<Convo>()!!
+                        tempConvo.user = convo.key!!
+                        result.add(tempConvo)
+                    }
+                    completion()
+                }
             }
         }
     }
