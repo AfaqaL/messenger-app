@@ -36,7 +36,7 @@
                 android:layout_gravity="bottom">
 
                 <EditText
-                    android:id="@+id/searchBar"
+                    android:id="@+id/main_search"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginStart="16dp"
