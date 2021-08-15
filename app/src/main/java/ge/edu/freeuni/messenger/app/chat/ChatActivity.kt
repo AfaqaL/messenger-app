@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ge.edu.freeuni.messenger.app.ProfileActivity
 import ge.edu.freeuni.messenger.app.R
@@ -27,6 +28,12 @@ class ChatActivity : AppCompatActivity() {
         chatter = intent.getStringExtra("conv-info")!!
         setupRecyclerView(chatter)
         addListeners()
+        findViewById<EditText>(R.id.message_input).setOnClickListener {
+            recyclerView.scrollToPosition(data.size - 1)
+        }
+        val llm = LinearLayoutManager(this)
+        llm.stackFromEnd = true
+        recyclerView.layoutManager = llm
     }
 
     private fun addListeners() {
@@ -50,6 +57,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun updateRV(){
         recyclerView.adapter?.notifyDataSetChanged()
+        recyclerView.scrollToPosition(data.size - 1)
     }
 
     fun sendMessage(view: View){
@@ -57,5 +65,6 @@ class ChatActivity : AppCompatActivity() {
         data.add(Message(messageText, true))
         updateRV()
         FirebaseUtil.sendSms(chatter, messageText)
+        findViewById<EditText>(R.id.message_input).text.clear()
     }
 }
