@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
@@ -49,8 +50,6 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
     }
 
     private fun completion(ls: ArrayList<Convo>) {
-//        findViewById<ProgressBar>(R.id.search_progress).visibility = View.INVISIBLE
-        Log.d(TAG, ls.toString())
         data.clear()
         data.addAll(ls)
         recyclerView.adapter!!.notifyDataSetChanged()
