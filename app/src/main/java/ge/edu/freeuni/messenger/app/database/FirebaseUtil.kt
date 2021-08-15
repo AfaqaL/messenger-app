@@ -158,8 +158,9 @@ object FirebaseUtil {
         user = null
     }
 
-    fun update(username: String, newOccupation: String) {
-        access("users", username).setValue(newOccupation);
+    fun update(username: String, newOccupation: String, completion: () -> Unit) {
+        access("users", username).setValue(newOccupation)
+        completion()
     }
 
     fun searchUsers(prefix: String, completion: (ls: List<User>) -> Unit) {

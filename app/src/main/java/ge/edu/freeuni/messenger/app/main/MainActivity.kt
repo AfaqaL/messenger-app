@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,11 +33,8 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
         setUpBottomNavigationBar()
         setUpRecyclerView()
         setUpToolBar()
-        //TODO: wait for user to not be null !!!
-
+        findViewById<ProgressBar>(R.id.main_progressBar).visibility = View.VISIBLE
         FirebaseUtil.initConversationData(data, this::updateRV)
-
-
     }
 
     private fun setUpToolBar() {
@@ -76,6 +75,7 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
 
     fun updateRV(){
         recyclerView.adapter?.notifyDataSetChanged()
+        findViewById<ProgressBar>(R.id.main_progressBar).visibility = View.INVISIBLE
     }
 
     override fun onClick(position: Int) {
