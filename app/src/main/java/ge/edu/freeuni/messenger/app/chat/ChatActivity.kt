@@ -53,7 +53,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View){
-        val messageText = findViewById<EditText>(R.id.message_input)
-        FirebaseUtil.sendSms(chatter, messageText.text.toString())
+        val messageText = findViewById<EditText>(R.id.message_input).text.toString()
+        data.add(Message(messageText, true))
+        updateRV()
+        FirebaseUtil.sendSms(chatter, messageText)
     }
 }

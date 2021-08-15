@@ -15,16 +15,13 @@ class ChatRecyclerViewAdapter(val data: ArrayList<Message>): RecyclerView.Adapte
 
     override fun getItemViewType(position: Int): Int {
         return if(data[position].sender){
-            Log.d(TAG, "getItemViewType: is")
-            0
-        }else{
-            Log.d(TAG, "getItemViewType: not")
             1
+        }else{
+            0
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRecyclerViewViewHolder {
 
-        Log.d(TAG, "onCreateViewHolder: $viewType")
         val view = if(viewType == 0) {
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.received_message_item, parent, false)
