@@ -8,7 +8,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -189,21 +192,37 @@ object FirebaseUtil {
     }
 
     fun initChatMessages(data: ArrayList<Message>, chatter: String, completion: () -> Unit) {
+        val reference = access("sms", user!!.username, chatter)
 
-        access("sms", user!!.username, chatter).get()
-            .addOnCompleteListener { task ->
+        reference.get().addOnCompleteListener { task ->
                 if (task.isSuccessful){
                     task.result?.let { messages ->
                         messages.children.forEach { message ->
-                            Log.d(TAG, "initChatMessages: ${message.value}")
                             val tempMsg = message.getValue<Message>()!!
                             data.add(tempMsg)
                         }
-                        Log.d(TAG, "initChatMessages: $data")
                         completion()
                     }
                 }
             }
 
+        reference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    snapshot.getValue<HashMap<String, Message>>()?.let { messages ->
+                        val updated = messages.values.sortedBy { it.sentAt }
+                        val last = updated.last()
+                        if(!last.sender){
+                            Log.d(TAG, "incomingMessage: ${last.text}")
+                            data.add(last)
+                        }
+                        Log.d(TAG, "updatedData: ${last.text}")
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d(TAG, "onCancelled: ${error.message}")
+                }
+
+            })
     }
 }
