@@ -51,10 +51,7 @@ object FirebaseUtil {
             user = null
         }
     }
-
-    fun filter(text: String) {
-        ref.startAt(text)
-    }
+    
 
     fun usernameFromMail(mail: String): String {
         val idx = mail.indexOf('@')

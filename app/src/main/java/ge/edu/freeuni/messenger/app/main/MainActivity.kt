@@ -5,16 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ge.edu.freeuni.messenger.app.HolderClickListener
 import ge.edu.freeuni.messenger.app.ProfileActivity
 import ge.edu.freeuni.messenger.app.R
+import ge.edu.freeuni.messenger.app.chat.ChatActivity
 import ge.edu.freeuni.messenger.app.search.SearchActivity
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
 import ge.edu.freeuni.messenger.app.database.model.Convo
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HolderClickListener {
     lateinit var recyclerView: RecyclerView
     lateinit var bottomNavigationView: BottomNavigationView
     private val data: ArrayList<Convo> = arrayListOf()
@@ -65,10 +68,16 @@ class MainActivity : AppCompatActivity() {
 
     fun setUpRecyclerView() {
         recyclerView = findViewById<RecyclerView>(R.id.messages_recycler_view)
-        recyclerView.adapter = RecyclerViewAdapter(data)
+        recyclerView.adapter = RecyclerViewAdapter(data, this)
     }
 
     fun updateRV(){
         recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onClick(position: Int) {
+        val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra("conv-info", data[position].user)
+        startActivity(intent)
     }
 }
