@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -18,11 +19,12 @@ import ge.edu.freeuni.messenger.app.chat.ChatActivity
 import ge.edu.freeuni.messenger.app.search.SearchActivity
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
 import ge.edu.freeuni.messenger.app.database.model.Convo
+import ge.edu.freeuni.messenger.app.database.model.User
 
 class MainActivity : AppCompatActivity(), HolderClickListener {
     lateinit var recyclerView: RecyclerView
     lateinit var bottomNavigationView: BottomNavigationView
-    private val data: ArrayList<Convo> = arrayListOf()
+    private var data: ArrayList<Convo> = arrayListOf()
     companion object{
         const val TAG = "MY-LOG"
     }
@@ -45,12 +47,19 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
     }
 
     private fun setUpToolBar() {
-        val searchBar = findViewById<EditText>(R.id.searchBar)
-//        searchBar.addTextChangedListener {
-//
-//        }
+        val searchBar = findViewById<EditText>(R.id.main_search)
+        searchBar.addTextChangedListener {
+            val text = searchBar.text.toString()
+            FirebaseUtil.searchUserChats(text, this::completion)
+        }
         setUpBottomNavigationBar()
         setUpRecyclerView()
+    }
+
+    private fun completion(ls: ArrayList<Convo>) {
+        data.clear()
+        data.addAll(ls)
+        recyclerView.adapter!!.notifyDataSetChanged()
     }
 
     private fun setUpBottomNavigationBar() {

@@ -19,6 +19,7 @@ import ge.edu.freeuni.messenger.app.database.model.Convo
 import ge.edu.freeuni.messenger.app.database.model.Message
 import ge.edu.freeuni.messenger.app.database.model.User
 import ge.edu.freeuni.messenger.app.main.MainActivity.Companion.TAG
+import kotlin.reflect.KFunction1
 
 
 object FirebaseUtil {
@@ -179,6 +180,36 @@ object FirebaseUtil {
                 ls.result?.let { users ->
                     users.children.forEach { user ->
                         res.add(User(user.key.toString(), user.value.toString()))
+                    }
+                    completion(res)
+                }
+            }
+    }
+
+    fun searchUserChats(prefix: String, completion: (ls: ArrayList<Convo>) -> Unit) {
+
+        val res = ArrayList<Convo>()
+        if (prefix.isBlank()) {
+            access("chats", user!!.username).get()
+                .addOnCompleteListener { ls ->
+                    ls.result?.let { convos ->
+                        convos.children.forEach { convo ->
+                            val temp = convo.getValue<Convo>()!!
+                            temp.user = convo.key!!
+                            res.add(temp)
+                        }
+                        completion(res)
+                    }
+                }
+            return
+        }
+        access("chats", user!!.username).orderByKey().startAt(prefix).endAt(prefix + "z").get()
+            .addOnCompleteListener { ls ->
+                ls.result?.let { convos ->
+                    convos.children.forEach { convo ->
+                        val temp = convo.getValue<Convo>()!!
+                        temp.user = convo.key!!
+                        res.add(temp)
                     }
                     completion(res)
                 }
