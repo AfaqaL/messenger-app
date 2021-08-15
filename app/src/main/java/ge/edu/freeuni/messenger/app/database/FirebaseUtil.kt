@@ -44,8 +44,9 @@ object FirebaseUtil {
 
     fun initUser() {
         val username = usernameFromMail(fUser!!.email!!)
+        user = User(username, "")
         access("users", username).get().addOnSuccessListener { data ->
-            user = User(username, data.value as String)
+            user!!.occupation = data.value as String
         }.addOnFailureListener {
             user = null
         }
