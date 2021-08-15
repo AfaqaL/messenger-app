@@ -1,9 +1,11 @@
 package ge.edu.freeuni.messenger.app
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
 import ge.edu.freeuni.messenger.app.main.MainActivity
@@ -13,7 +15,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         FirebaseUtil.fUser?.let {
-            loginRedirect()
+            loginRedirect(true)
         }
     }
 
@@ -23,7 +25,9 @@ class LoginActivity : AppCompatActivity() {
     fun login(view: View){
         val uet = findViewById<EditText>(R.id.edit_text_email)
         val pet = findViewById<EditText>(R.id.edit_text_password)
+        val loader = findViewById<ProgressBar>(R.id.login_progress)
 
+        loader.visibility = View.VISIBLE
         FirebaseUtil.login(uet.text.toString(), pet.text.toString(),this, this::loginRedirect)
     }
 
@@ -32,8 +36,11 @@ class LoginActivity : AppCompatActivity() {
         // TODO: finish this activity or set flags in signup
     }
 
-    private fun loginRedirect(){
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+    private fun loginRedirect(success: Boolean){
+        if (success) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+        findViewById<ProgressBar>(R.id.login_progress).visibility = View.INVISIBLE
     }
 }

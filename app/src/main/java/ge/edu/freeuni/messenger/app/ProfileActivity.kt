@@ -8,32 +8,45 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
+import ge.edu.freeuni.messenger.app.database.model.User
 import ge.edu.freeuni.messenger.app.main.MainActivity
+import ge.edu.freeuni.messenger.app.search.SearchActivity
 
 class ProfileActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
+    lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        user = FirebaseUtil.user!!
         setUpBottomNavigationBar()
         addListeners()
         showCurrentUserInfo()
     }
 
     private fun showCurrentUserInfo() {
-        var user = FirebaseUtil.user!!
-        var nickname = user.username
-        var profession = user.occupation
+        val nickname = user.username
+        val profession = user.occupation
 
-        Toast.makeText(this, profession, Toast.LENGTH_SHORT)
         findViewById<TextView>(R.id.profile_nickname).text = nickname
         findViewById<EditText>(R.id.profile_profession).hint = profession
     }
 
     private fun addListeners() {
         addSignOutListener()
+        addUpdateListener()
+        setUpFAB()
+    }
+
+    private fun addUpdateListener() {
+        val profession = findViewById<EditText>(R.id.profile_profession)
+        findViewById<Button>(R.id.update).setOnClickListener {
+            FirebaseUtil.update(user.username, profession.text.toString())
+            FirebaseUtil.initUser()
+        }
     }
 
     private fun addSignOutListener() {
@@ -54,6 +67,15 @@ class ProfileActivity : AppCompatActivity() {
                 finish()
             }
             true
+        }
+        bottomNavigationView.selectedItemId = R.id.settings
+    }
+
+    private fun setUpFAB() {
+        val button = findViewById<FloatingActionButton>(R.id.profile_fab)
+        button.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+            finish()
         }
     }
 }

@@ -26,32 +26,32 @@ object FirebaseUtil {
     init {
         fUser = Firebase.auth.currentUser
         user = null
-        initUser()
-        if(fUser != null){ initUser() }
+        if (fUser != null) {
+            initUser()
+        }
     }
 
-    private fun initUser() {
+    fun initUser() {
         val username = usernameFromMail(fUser!!.email!!)
         access("users", username).get().addOnSuccessListener { data ->
             user = User(username, data.value as String)
-        }.addOnFailureListener{
+        }.addOnFailureListener {
             user = null
         }
     }
 
-    fun filter(text: String){
+    fun filter(text: String) {
         ref.startAt(text)
     }
 
-    fun usernameFromMail(mail: String): String{
+    fun usernameFromMail(mail: String): String {
         val idx = mail.indexOf('@')
-        Log.d("mylog-username", mail.substring(0, idx))
         return mail.substring(0, idx)
     }
 
-    fun access(vararg children: String): DatabaseReference{
+    fun access(vararg children: String): DatabaseReference {
         var child = ref
-        for(ch in children){
+        for (ch in children) {
             child = child.child(ch)
         }
         return child
@@ -61,43 +61,51 @@ object FirebaseUtil {
         return access(*children).push().key
     }
 
-    fun hasActiveUser(): Boolean{
+    fun hasActiveUser(): Boolean {
         return fUser != null
     }
 
-    fun signup(username: String, password: String, occupation: String, context: Context,
-               completion: () -> Unit): Boolean {
-        return when{
-            occupation.isBlank() ->{
-                Toast.makeText(context, "Occupation field can not be empty", Toast.LENGTH_SHORT).show()
+    fun signup(
+        username: String, password: String, occupation: String, context: Context,
+        completion: (success: Boolean) -> Unit
+    ): Boolean {
+        return when {
+            occupation.isBlank() -> {
+                Toast.makeText(context, "Occupation field can not be empty", Toast.LENGTH_SHORT)
+                    .show()
+                completion(false)
                 false
             }
             username.isBlank() -> {
-                Toast.makeText(context, "Username field can not be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Username field can not be empty", Toast.LENGTH_SHORT)
+                    .show()
+                completion(false)
                 false
             }
             password.isBlank() || password.length < 8 -> {
-                Toast.makeText(context,
+                Toast.makeText(
+                    context,
                     "Password can not be only whitespaces and must be at least 8 characters long",
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_LONG
+                ).show()
+                completion(false)
                 false
             }
             else -> {
                 auth.createUserWithEmailAndPassword("$username$mail", password)
-                    .addOnCompleteListener{ task ->
-                        if(task.isSuccessful){
-                            // TODO: call a method identifying a success (callback)
-                            Toast.makeText(context,
-                                "Success!!!!!",
-                                Toast.LENGTH_LONG).show()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
                             fUser = Firebase.auth.currentUser
                             access("users", username).setValue(occupation)
                             user = User(username, occupation)
-                            completion()
-                        }else{
-                            Toast.makeText(context,
-                                "Error: Failed to register user\nReason 1111: ${task.exception?.localizedMessage}",
-                                Toast.LENGTH_LONG).show()
+                            completion(true)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Error: Failed to register user\n ${task.exception?.localizedMessage}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            completion(false)
                         }
                     }
                 return true
@@ -105,27 +113,22 @@ object FirebaseUtil {
         }
     }
 
-    fun login(username: String, password: String, context: Context, completion: () -> Unit){
+    fun login(username: String, password: String, context: Context, completion: (success: Boolean) -> Unit) {
         auth.signInWithEmailAndPassword("$username$mail", password)
-            .addOnCompleteListener{ task ->
-                if(task.isSuccessful){
-                    // TODO: call a method identifying a success (callback)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     fUser = Firebase.auth.currentUser
-                    Toast.makeText(context,
-                        "Success!!!!",
-                        Toast.LENGTH_LONG).show()
                     initUser()
-                    completion()
-                }else{
-                    Toast.makeText(context,
-                        "Suck My DDD",
-                        Toast.LENGTH_LONG).show()
+                    completion(true)
                 }
             }
-            .addOnFailureListener{
-                Toast.makeText(context,
-                    "Failed: ${it.localizedMessage}",
-                    Toast.LENGTH_LONG).show()
+            .addOnFailureListener {
+                Toast.makeText(
+                    context,
+                    "Failed to log in: ${it.localizedMessage}",
+                    Toast.LENGTH_LONG
+                ).show()
+                completion(false)
             }
     }
 
@@ -133,5 +136,22 @@ object FirebaseUtil {
         auth.signOut()
         fUser = null
         user = null
+    }
+
+    fun update(username: String, newOccupation: String) {
+        access("users", username).setValue(newOccupation);
+    }
+
+    fun searchUsers(prefix: String, completion: (ls: List<User>) -> Unit) {
+
+        val res = mutableListOf<User>()
+        access("users").orderByKey().startAt(prefix).endAt(prefix+"z").get().addOnCompleteListener { ls ->
+            ls.result?.let { users ->
+                users.children.forEach { user ->
+                    res.add(User(user.key.toString(), user.value.toString()))
+                }
+                completion(res)
+            }
+        }
     }
 }

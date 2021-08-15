@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/update"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -45,7 +45,6 @@
             android:ems="10"
             android:textColorHint="@color/grey"
             android:textColor="@color/grey"
-            android:text="Nino Tatenashvili"
             app:layout_constraintBottom_toTopOf="@+id/profile_profession"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -56,14 +55,14 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:textColor="@color/grey"
             android:background="@drawable/edit_text_background"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Developer"
-            app:layout_constraintBottom_toTopOf="@+id/button3"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/update"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -79,7 +78,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_button"
+        android:id="@+id/profile_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
