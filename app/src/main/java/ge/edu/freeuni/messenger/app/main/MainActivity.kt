@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
     lateinit var recyclerView: RecyclerView
     lateinit var bottomNavigationView: BottomNavigationView
     private val data: ArrayList<Convo> = arrayListOf()
+    companion object{
+        const val TAG = "MY-LOG"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

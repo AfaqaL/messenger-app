@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ge.edu.freeuni.messenger.app.database.model.Convo
 import ge.edu.freeuni.messenger.app.database.model.Message
 import ge.edu.freeuni.messenger.app.database.model.User
+import ge.edu.freeuni.messenger.app.main.MainActivity.Companion.TAG
 
 
 object FirebaseUtil {
@@ -36,10 +37,12 @@ object FirebaseUtil {
 
     fun sendSms(to: String, text: String){
         val key = key("sms", user!!.username, to)
+        val message = Message(text, true)
         access("sms", user!!.username, to, key)
-            .setValue(Message(text, true))
+            .setValue(message)
+        message.sender = false
         access("sms", to, user!!.username, key)
-            .setValue(Message(text, false))
+            .setValue(message)
     }
 
     fun initUser() {
@@ -51,7 +54,7 @@ object FirebaseUtil {
             user = null
         }
     }
-    
+
 
     fun usernameFromMail(mail: String): String {
         val idx = mail.indexOf('@')
@@ -172,8 +175,7 @@ object FirebaseUtil {
     }
 
     fun initConversationData(result: ArrayList<Convo>, completion: () -> Unit) {
-        val convosRef = access("chats", user!!.username)
-        convosRef.get().addOnCompleteListener { task ->
+        access("chats", user!!.username).get().addOnCompleteListener { task ->
             if (task.isSuccessful){
                 task.result?.let { convos ->
                     convos.children.forEach { convo ->
@@ -185,5 +187,24 @@ object FirebaseUtil {
                 }
             }
         }
+    }
+
+    fun initChatMessages(data: ArrayList<Message>, chatter: String, completion: () -> Unit) {
+
+        access("sms", user!!.username, chatter).get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    task.result?.let { messages ->
+                        messages.children.forEach { message ->
+                            Log.d(TAG, "initChatMessages: ${message.value}")
+                            val tempMsg = message.getValue<Message>()!!
+                            data.add(tempMsg)
+                        }
+                        Log.d(TAG, "initChatMessages: $data")
+                        completion()
+                    }
+                }
+            }
+
     }
 }
