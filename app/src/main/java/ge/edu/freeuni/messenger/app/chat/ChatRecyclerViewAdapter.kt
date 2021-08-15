@@ -1,5 +1,6 @@
 package ge.edu.freeuni.messenger.app.chat
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ge.edu.freeuni.messenger.app.R
 import ge.edu.freeuni.messenger.app.database.model.Message
 import ge.edu.freeuni.messenger.app.main.MainActivity.Companion.TAG
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 class ChatRecyclerViewAdapter(val data: ArrayList<Message>): RecyclerView.Adapter<ChatRecyclerViewViewHolder>() {
 
@@ -36,10 +40,11 @@ class ChatRecyclerViewAdapter(val data: ArrayList<Message>): RecyclerView.Adapte
         return data.size
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ChatRecyclerViewViewHolder, position: Int) {
         val curr = data[position]
         holder.messageText.text = curr.text
-        holder.sentAt.text = curr.sentAt.toString() // TODO: convert to time
+        holder.sentAt.text = SimpleDateFormat("hh:mm").format(curr.sentAt) // TODO: convert to time
     }
 }
 

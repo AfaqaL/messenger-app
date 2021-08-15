@@ -34,6 +34,13 @@ class MainActivity : AppCompatActivity(), HolderClickListener {
         setUpRecyclerView()
         setUpToolBar()
         findViewById<ProgressBar>(R.id.main_progressBar).visibility = View.VISIBLE
+//        FirebaseUtil.initConversationData(data, this::updateRV)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        data.clear()
         FirebaseUtil.initConversationData(data, this::updateRV)
     }
 

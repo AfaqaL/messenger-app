@@ -39,13 +39,21 @@ object FirebaseUtil {
 
 
     fun sendSms(to: String, text: String){
-        val key = key("sms", user!!.username, to)
-        val message = Message(text, true)
-        access("sms", user!!.username, to, key)
-            .setValue(message)
-        message.sender = false
-        access("sms", to, user!!.username, key)
-            .setValue(message)
+        user?.let { user ->
+            val username = user.username
+            val key = key("sms", username, to)
+
+            val message = Message(text, true)
+            access("sms", username, to, key).setValue(message)
+
+            message.sender = false
+            access("sms", to, username, key).setValue(message)
+            
+            val convo = Convo(to, text, message.sentAt)
+            access("chats", username, to).setValue(convo)
+            convo.user = username
+            access("chats", to, username).setValue(convo)
+        }
     }
 
     fun initUser() {
@@ -214,10 +222,9 @@ object FirebaseUtil {
                         val updated = messages.values.sortedBy { it.sentAt }
                         val last = updated.last()
                         if(!last.sender){
-                            Log.d(TAG, "incomingMessage: ${last.text}")
                             data.add(last)
+                            completion()
                         }
-                        Log.d(TAG, "updatedData: ${last.text}")
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
