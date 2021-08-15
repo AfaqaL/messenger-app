@@ -3,10 +3,8 @@ package ge.edu.freeuni.messenger.app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ge.edu.freeuni.messenger.app.database.FirebaseUtil
@@ -44,9 +42,14 @@ class ProfileActivity : AppCompatActivity() {
     private fun addUpdateListener() {
         val profession = findViewById<EditText>(R.id.profile_profession)
         findViewById<Button>(R.id.update).setOnClickListener {
-            FirebaseUtil.update(user.username, profession.text.toString())
+            findViewById<ProgressBar>(R.id.profile_progress).visibility = View.VISIBLE
+            FirebaseUtil.update(user.username, profession.text.toString(), this::hideProgressBar)
             FirebaseUtil.initUser()
         }
+    }
+
+    private fun hideProgressBar() {
+        findViewById<ProgressBar>(R.id.profile_progress).visibility = View.INVISIBLE
     }
 
     private fun addSignOutListener() {

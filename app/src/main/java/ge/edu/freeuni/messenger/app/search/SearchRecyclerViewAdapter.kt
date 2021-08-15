@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ge.edu.freeuni.messenger.app.HolderClickListener
 import ge.edu.freeuni.messenger.app.R
 import ge.edu.freeuni.messenger.app.database.model.User
 
-class SearchRecyclerViewAdapter(): RecyclerView.Adapter<SearchRecyclerViewViewHolder>() {
+class SearchRecyclerViewAdapter(private val clickListener: HolderClickListener): RecyclerView.Adapter<SearchRecyclerViewViewHolder>() {
 
     var list = listOf<User>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRecyclerViewViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.search_item, parent, false)
-        return SearchRecyclerViewViewHolder(view)
+        return SearchRecyclerViewViewHolder(view, clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -29,7 +30,14 @@ class SearchRecyclerViewAdapter(): RecyclerView.Adapter<SearchRecyclerViewViewHo
     }
 }
 
-class SearchRecyclerViewViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class SearchRecyclerViewViewHolder(itemView: View, private val clickListener: HolderClickListener): RecyclerView.ViewHolder(itemView), View.OnClickListener {
     val username = itemView.findViewById<TextView>(R.id.search_username)
     val profession = itemView.findViewById<TextView>(R.id.search_profession)
+    init {
+        itemView.setOnClickListener(this)
+    }
+
+    override fun onClick(view: View?) {
+        clickListener.onClick(adapterPosition)
+    }
 }
